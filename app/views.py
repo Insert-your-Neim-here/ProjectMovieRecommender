@@ -13,9 +13,9 @@ def browse(request):
         movies = popular_movies()
     return render(request, "browse.html", {"movies": movies, "q": q})
 
-def movie_detail(request, tmdb_id):
-    movie = movie_details(tmdb_id)
-    return render(request, "movie_detail.html", {"movie": movie})
+# def movie_detail(request, tmdb_id):
+#     movie = movie_details(tmdb_id)
+#     return render(request, "movie_detail.html", {"movie": movie})
 
 from django.shortcuts import render, redirect
 from app.services.tmdb_client import movie_details
