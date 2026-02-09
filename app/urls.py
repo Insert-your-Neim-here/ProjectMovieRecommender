@@ -3,4 +3,8 @@ from . import views
 
 urlpatterns = [
     path("", views.browse, name="browse"),
+    path("movie/<int:tmdb_id>/", views.movie_detail, name="movie_detail"),
+    path("journals/", views.journals, name="journals"), 
+    path("recommendations/", views.recommendations, name="recommendations"),
+
 ]

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Your Journal Entries</h1>
+
+  {% if entries %}
+    <ul>
+      {% for e in entries %}
+        <li style="margin: 12px 0;">
+          <b>{{ e.movie_title }}</b> — {{ e.created_at }}<br>
+          {{ e.text|truncatechars:200 }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No entries yet. Go browse a movie and write one.</p>
+  {% endif %}
+{% endblock %}

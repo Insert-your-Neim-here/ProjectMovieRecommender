@@ -46,3 +46,14 @@ def movie_details(tmdb_id: int):
     )
     r.raise_for_status()
     return r.json()
+
+def similar_movies(tmdb_id: int):
+    r = requests.get(
+        f"{TMDB_API_BASE}/movie/{tmdb_id}/similar",
+        headers=_headers(),
+        params={"page": 1},
+        timeout=10,
+    )
+    r.raise_for_status()
+    return r.json()["results"]
+

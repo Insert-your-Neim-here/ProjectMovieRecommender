@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Your 3 Recommendations</h1>
+
+  {% if message %}
+    <p>{{ message }}</p>
+  {% endif %}
+
+  {% if recs %}
+    <ol>
+      {% for m in recs %}
+        <li style="margin: 10px 0;">
+          <a href="/movie/{{ m.id }}/"><b>{{ m.title }}</b></a>
+          {% if m.release_date %} ({{ m.release_date }}){% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  {% endif %}
+{% endblock %}

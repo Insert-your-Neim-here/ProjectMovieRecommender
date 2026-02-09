@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ movie.title }}</h1>
+
+  {% if movie.poster_path %}
+    <img src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}" alt="{{ movie.title }}">
+  {% endif %}
+
+  <p><b>Runtime:</b> {{ movie.runtime }} minutes</p>
+  <p><b>Overview:</b> {{ movie.overview }}</p>
+
+  <hr>
+  <h2>Write a journal entry</h2>
+  <form method="post">
+    {% csrf_token %}
+    <textarea name="text" rows="6" style="width: 100%;" placeholder="What did you think?"></textarea>
+    <button type="submit">Save entry</button>
+  </form>
+
+  <p><a href="/">← Back to browse</a></p>
+{% endblock %}
