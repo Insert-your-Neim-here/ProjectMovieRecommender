@@ -1,9 +1,16 @@
 import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 TMDB_API_BASE = "https://api.themoviedb.org/3"
 TMDB_TOKEN = os.environ.get("TMDB_TOKEN")
 
+print("TMDB_TOKEN loaded?", bool(TMDB_TOKEN), "Length:", len(TMDB_TOKEN) if TMDB_TOKEN else 0)
+
+if not TMDB_TOKEN:
+    raise RuntimeError("TMDB_TOKEN is not set. Check your .env file.")
 def _headers():
     return {
         "Authorization": f"Bearer {TMDB_TOKEN}",
