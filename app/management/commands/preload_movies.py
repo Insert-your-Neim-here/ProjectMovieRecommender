@@ -51,6 +51,7 @@ class Command(BaseCommand):
             results = popular_movies(page=p)
 
             for m in results:
+                self.stdout.write(f"Upserting {m['id']} - {m['title']}...")
                 upsert_movie_from_tmdb(m["id"])
                 total += 1
                 self.stdout.write(self.style.SUCCESS(f"Embedded: {m['title']}"))

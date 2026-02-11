@@ -81,23 +81,40 @@ from app.models import JournalEntry
 from app.services.tmdb_client import movie_details
 import random
 
+# def recommendations(request):
+#     profile = get_or_create_profile(request)
+#     entries = list(JournalEntry.objects.filter(profile=profile).order_by("-created_at"))
+
+#     if not entries:
+#         return render(request, "recommendations.html", {"recs": [], "message": "Write a journal entry first."})
+
+#     # Take the most recent movie and ask TMDB for similar movies
+#     seed_tmdb_id = entries[0].tmdb_id
+
+#     # TMDB has /movie/{id}/similar — add this function in tmdb_client.py
+#     from app.services.tmdb_client import similar_movies
+#     candidates = similar_movies(seed_tmdb_id)
+
+#     # pick 3 random for now (works immediately)
+#     recs = random.sample(candidates, k=min(3, len(candidates)))
+
+#     return render(request, "recommendations.html", {"recs": recs, "message": ""})
+
+from django.shortcuts import render
+from app.services.profile_service import get_or_create_profile
+from app.services.recommender import recommend
+
 def recommendations(request):
     profile = get_or_create_profile(request)
-    entries = list(JournalEntry.objects.filter(profile=profile).order_by("-created_at"))
 
-    if not entries:
-        return render(request, "recommendations.html", {"recs": [], "message": "Write a journal entry first."})
+    max_runtime = request.GET.get("max_runtime")
+    max_runtime = int(max_runtime) if max_runtime and max_runtime.isdigit() else None
 
-    # Take the most recent movie and ask TMDB for similar movies
-    seed_tmdb_id = entries[0].tmdb_id
+    picked, explanations = recommend(profile, k=3, max_runtime=max_runtime)
 
-    # TMDB has /movie/{id}/similar — add this function in tmdb_client.py
-    from app.services.tmdb_client import similar_movies
-    candidates = similar_movies(seed_tmdb_id)
-
-    # pick 3 random for now (works immediately)
-    recs = random.sample(candidates, k=min(3, len(candidates)))
-
-    return render(request, "recommendations.html", {"recs": recs, "message": ""})
-
+    return render(request, "recommendations.html", {
+        "picked": picked,
+        "explanations": explanations,
+        "max_runtime": max_runtime or "",
+    })
 

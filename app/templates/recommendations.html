@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+<!-- {% extends "base.html" %}
 {% block content %}
   <h1>Your 3 Recommendations</h1>
 
@@ -16,4 +16,39 @@
       {% endfor %}
     </ol>
   {% endif %}
+{% endblock %} -->
+
+{% extends "base.html" %}
+{% block content %}
+  <h1>Your 3 Recommendations</h1>
+
+  <form method="get" style="margin: 12px 0;">
+    <label>Max runtime (minutes):</label>
+    <input name="max_runtime" value="{{ max_runtime }}" style="width:80px;">
+    <button type="submit">Apply</button>
+  </form>
+
+  {% if picked %}
+    <ol>
+      {% for movie, score in picked %}
+        <li style="margin: 16px 0;">
+          <a href="/movie/{{ movie.tmdb_id }}/"><b>{{ movie.title }}</b></a>
+          {% if movie.runtime %} — {{ movie.runtime }} min{% endif %}
+          <div style="font-size: 0.95em; margin-top: 4px;">
+            <i>{{ explanations|dictsort:0 }}</i>
+          </div>
+          <div style="margin-top: 6px;">
+            <b>Why:</b> {{ explanations.movie.tmdb_id }}
+          </div>
+          <div>
+            {{ explanations[movie.tmdb_id].because }}<br>
+            <span style="opacity:0.8;">{{ explanations[movie.tmdb_id].evidence }}</span>
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p>No recommendations yet. Write 1–2 journal entries first.</p>
+  {% endif %}
 {% endblock %}
+
