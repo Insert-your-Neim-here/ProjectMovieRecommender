@@ -22,9 +22,35 @@ from app.services.tmdb_client import movie_details
 from app.services.profile_service import get_or_create_profile
 from app.models import JournalEntry
 
+#  def movie_detail(request, tmdb_id: int):
+#     profile = get_or_create_profile(request)
+#     movie = movie_details(tmdb_id)
+
+#     if request.method == "POST":
+#         text = request.POST.get("text", "").strip()
+#         if text:
+#             JournalEntry.objects.create(
+#                 profile=profile,
+#                 tmdb_id=tmdb_id,
+#                 movie_title=movie.get("title", ""),
+#                 text=text,
+#             )
+#         return redirect("journals")
+
+#     return render(request, "movie_detail.html", {"movie": movie})
+from django.shortcuts import render, redirect
+from app.models import JournalEntry
+from app.services.profile_service import get_or_create_profile
+from app.services.tmdb_client import movie_details
+from app.services.embedding_service import embed_text
+from app.services.movie_ingest import upsert_movie_from_tmdb
+
 def movie_detail(request, tmdb_id: int):
     profile = get_or_create_profile(request)
     movie = movie_details(tmdb_id)
+
+    # Ensure movie exists in DB + embedded (helps recs later)
+    upsert_movie_from_tmdb(tmdb_id)
 
     if request.method == "POST":
         text = request.POST.get("text", "").strip()
@@ -34,6 +60,7 @@ def movie_detail(request, tmdb_id: int):
                 tmdb_id=tmdb_id,
                 movie_title=movie.get("title", ""),
                 text=text,
+                embedding=embed_text(text),
             )
         return redirect("journals")
 

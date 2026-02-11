@@ -27,15 +27,26 @@ def search_movies(query: str):
     r.raise_for_status()
     return r.json()["results"]
 
-def popular_movies():
+# def popular_movies():
+#     r = requests.get(
+#         f"{TMDB_API_BASE}/movie/popular",
+#         headers=_headers(),
+#         params={"page": 1},
+#         timeout=10,
+#     )
+#     r.raise_for_status()
+#     return r.json()["results"]
+
+def popular_movies(page: int = 1):
     r = requests.get(
         f"{TMDB_API_BASE}/movie/popular",
         headers=_headers(),
-        params={"page": 1},
+        params={"page": page},
         timeout=10,
     )
     r.raise_for_status()
     return r.json()["results"]
+
 
 def movie_details(tmdb_id: int):
     r = requests.get(
