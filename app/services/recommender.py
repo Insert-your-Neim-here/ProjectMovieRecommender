@@ -1,6 +1,7 @@
 import math
 from datetime import datetime, timezone
 from app.models import JournalEntry, Movie
+from pgvector.django import CosineDistance
 
 def build_profile_vector(entries):
     if not entries:
@@ -10,7 +11,7 @@ def build_profile_vector(entries):
     total_w = 0.0
 
     for e in entries:
-        if not e.embedding:
+        if e.embedding is None:
             continue
         age_days = (now - e.created_at).total_seconds() / (3600 * 24)
         w = math.exp(-age_days / 30.0)  # recency weighting
@@ -51,7 +52,7 @@ def recommend(profile, k=3, max_runtime=None):
         qs = qs.filter(runtime__isnull=False, runtime__lte=max_runtime)
 
     # Order by cosine distance (pgvector)
-    candidates = list(qs.order_by("embedding__cosine_distance", profile_vec)[:200])
+    candidates = list(qs.order_by(CosineDistance('embedding', profile_vec))[:200])
 
     # Score + pick diverse top 3 (simple genre diversity)
     scored = []

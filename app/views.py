@@ -112,9 +112,18 @@ def recommendations(request):
 
     picked, explanations = recommend(profile, k=3, max_runtime=max_runtime)
 
+    # Combine picked and explanations for easier template access
+    picked_with_explanations = [
+        {
+            "movie": m,
+            "score": s,
+            "explanation": explanations.get(m.tmdb_id, {})
+        }
+        for m, s in picked
+    ]
+
     return render(request, "recommendations.html", {
-        "picked": picked,
-        "explanations": explanations,
+        "picked": picked_with_explanations,
         "max_runtime": max_runtime or "",
     })
 from django.shortcuts import redirect, get_object_or_404
