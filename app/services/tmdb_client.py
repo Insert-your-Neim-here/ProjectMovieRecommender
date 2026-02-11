@@ -7,7 +7,7 @@ load_dotenv()
 TMDB_API_BASE = "https://api.themoviedb.org/3"
 TMDB_TOKEN = os.environ.get("TMDB_TOKEN")
 
-print("TMDB_TOKEN loaded?", bool(TMDB_TOKEN), "Length:", len(TMDB_TOKEN) if TMDB_TOKEN else 0)
+# print("TMDB_TOKEN loaded?", bool(TMDB_TOKEN), "Length:", len(TMDB_TOKEN) if TMDB_TOKEN else 0)
 
 if not TMDB_TOKEN:
     raise RuntimeError("TMDB_TOKEN is not set. Check your .env file.")
