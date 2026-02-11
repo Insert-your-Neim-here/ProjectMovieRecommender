@@ -117,4 +117,19 @@ def recommendations(request):
         "explanations": explanations,
         "max_runtime": max_runtime or "",
     })
+from django.shortcuts import redirect, get_object_or_404
+from app.models import JournalEntry
+from app.services.profile_service import get_or_create_profile
+
+def delete_journal(request, entry_id: int):
+    profile = get_or_create_profile(request)
+
+    entry = get_object_or_404(JournalEntry, id=entry_id, profile=profile)
+
+    if request.method == "POST":
+        entry.delete()
+        return redirect("journals")
+
+    # Simple confirmation page
+    return render(request, "confirm_delete.html", {"entry": entry})
 

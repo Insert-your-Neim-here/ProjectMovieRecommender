@@ -8,6 +8,10 @@
         <li style="margin: 12px 0;">
           <b>{{ e.movie_title }}</b> — {{ e.created_at }}<br>
           {{ e.text|truncatechars:200 }}
+          <form method="get" action="/journals/{{ e.id }}/delete/" style="display:inline;">
+  <button type="submit">Delete</button>
+</form>
+
         </li>
       {% endfor %}
     </ul>
