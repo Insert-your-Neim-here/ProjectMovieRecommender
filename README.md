@@ -24,7 +24,7 @@ The system explains recommendations by showing the most similar journal entry.
 
 1. Clone Repository
 git clone https://github.com/Insert-your-Neim-here/ProjectMovieRecommender
-cd ProjectCode
+cd ProjectMovieRecommender
 
 2. Create Virtual Environment
 python -m venv .venv
@@ -32,6 +32,8 @@ python -m venv .venv
 
 3. Install Dependencies
 pip install -r requirements.txt
+
+it will take a couple of minutes
 
 4. Create Environment File
 Create a .env file in the project root using the template below:
@@ -59,7 +61,7 @@ User: mj
 Password: mj
 
 6. Enable pgvector Extension
-docker exec -it projectcode-db-1 bash
+docker exec -it projectmovierecommender-db-1 bash
 psql -U mj -d moviejournal
 CREATE EXTENSION IF NOT EXISTS vector;
 \q
@@ -71,5 +73,9 @@ python manage.py migrate
 8. Run Development Server
 python manage.py runserver
 
+CTRL+C to stop the server
+
 9. Preloading Movie Data
 python manage.py preload_movies --pages 10
+
+going to take a couple of minutes, possibility to lower the number of pages if wanted
