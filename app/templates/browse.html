@@ -1,21 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Browse Movies</h1>
 
-  <form method="get" action="/" style="margin: 12px 0;">
-    <input name="q" value="{{ q|default:'' }}" placeholder="Search movies..." style="width: 320px;">
-    <button type="submit">Search</button>
-  </form>
+<form class="controls" method="get" action="/">
+  <input class="input" name="q" value="{{ q|default:'' }}" placeholder=" " />
+  <button class="btn" type="submit">Search</button>
+</form>
 
-  {% if movies %}
-    <ul>
-      {% for m in movies %}
-        <li style="margin: 8px 0;">
-          <a href="/movie/{{ m.id }}/">{{ m.title }} ({{ m.release_date|default:"" }})</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No movies found.</p>
-  {% endif %}
+<div class="grid-4">
+  {% for m in movies %}
+    <a class="movie-card" href="/movie/{{ m.id }}/">
+      <div class="poster">
+        {% if m.poster_path %}
+          <img src="https://image.tmdb.org/t/p/w500{{ m.poster_path }}" alt="{{ m.title }}" style="width:100%;height:100%;object-fit:cover;">
+        {% else %}
+          Movie poster
+        {% endif %}
+      </div>
+      <div class="title-chip">{{ m.title }}</div>
+    </a>
+  {% endfor %}
+</div>
+
 {% endblock %}

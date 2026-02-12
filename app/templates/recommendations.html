@@ -2,10 +2,10 @@
 {% block content %}
   <h1>Your 3 Recommendations</h1>
 
-  <form method="get" style="margin: 12px 0;">
+  <form  class="controls" method="get" style="margin: 12px 0;">
     <label>Max runtime (minutes):</label>
-    <input name="max_runtime" value="{{ max_runtime }}" style="width:80px;">
-    <button type="submit">Apply</button>
+    <input class="input" name="max_runtime" value="{{ max_runtime }}" style="width:80px;">
+    <button class="btn" type="submit">Apply</button>
   </form>
 
   {% if picked %}
@@ -26,4 +26,3 @@
     <p>No recommendations yet. Write 1–2 journal entries first.</p>
   {% endif %}
 {% endblock %}
-

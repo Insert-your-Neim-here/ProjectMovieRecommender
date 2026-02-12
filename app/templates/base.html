@@ -1,20 +1,41 @@
+
+
+{% load static %}
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Movie Journal</title>
-  </head>
-  <body>
-    <header style="padding:16px; border-bottom:1px solid #ddd;">
-      <a href="/" style="font-weight:bold; text-decoration:none;">MovieJournal</a>
-      <span style="margin-left:16px;">
-        <a href="/journals/">Journals</a> |
-        <a href="/recommendations/">Recommendations</a>
-      </span>
+<head>
+  <meta charset="utf-8">
+  <title>After the Credits</title>
+  <link rel="stylesheet" href="{% static 'app/styles.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="container">
+    <header class="header">
+      <!-- Curved title using SVG -->
+      <svg class="brand-arc" viewBox="0 0 220 140">
+        <defs>
+          <path id="arc" d="M20,110 A90,90 0 0,1 200,110" />
+        </defs>
+        <text font-size="26" fill="#141414" letter-spacing="3">
+          <textPath href="#arc" startOffset="50%" text-anchor="middle">
+            After the credits
+          </textPath>
+        </text>
+      </svg>
+
+      <nav class="nav">
+        <a href="/" class="{% if active_page == 'browse' %}active{% endif %}">Browse</a>
+        <a href="/journals/" class="{% if active_page == 'journal' %}active{% endif %}">Journal</a>
+        <a href="/recommendations/" class="{% if active_page == 'recs' %}active{% endif %}">Recommendation</a>
+      </nav>
     </header>
 
-    <main style="padding:16px;">
-      {% block content %}{% endblock %}
-    </main>
-  </body>
+    {% block content %}{% endblock %}
+  </div>
+
+</body>
 </html>

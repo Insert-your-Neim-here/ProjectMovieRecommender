@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from app.models import JournalEntry, Movie
 from pgvector.django import CosineDistance
 
+
 def build_profile_vector(entries):
     if not entries:
         return None

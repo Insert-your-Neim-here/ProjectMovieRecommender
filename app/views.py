@@ -11,34 +11,9 @@ def browse(request):
         movies = search_movies(q)
     else:
         movies = popular_movies()
-    return render(request, "browse.html", {"movies": movies, "q": q})
+    return render(request, "browse.html", {"movies": movies, "q": q,  "active_page": "browse"})
 
-# def movie_detail(request, tmdb_id):
-#     movie = movie_details(tmdb_id)
-#     return render(request, "movie_detail.html", {"movie": movie})
 
-from django.shortcuts import render, redirect
-from app.services.tmdb_client import movie_details
-from app.services.profile_service import get_or_create_profile
-from app.models import JournalEntry
-
-#  def movie_detail(request, tmdb_id: int):
-#     profile = get_or_create_profile(request)
-#     movie = movie_details(tmdb_id)
-
-#     if request.method == "POST":
-#         text = request.POST.get("text", "").strip()
-#         if text:
-#             JournalEntry.objects.create(
-#                 profile=profile,
-#                 tmdb_id=tmdb_id,
-#                 movie_title=movie.get("title", ""),
-#                 text=text,
-#             )
-#         return redirect("journals")
-
-#     return render(request, "movie_detail.html", {"movie": movie})
-from django.shortcuts import render, redirect
 from app.models import JournalEntry
 from app.services.profile_service import get_or_create_profile
 from app.services.tmdb_client import movie_details
@@ -73,32 +48,11 @@ from app.services.profile_service import get_or_create_profile
 def journals(request):
     profile = get_or_create_profile(request)
     entries = JournalEntry.objects.filter(profile=profile).order_by("-created_at")
-    return render(request, "journals.html", {"entries": entries})
+    return render(request, "journals.html", {"entries": entries, "active_page": "journal"})
 
 
-from app.services.profile_service import get_or_create_profile
-from app.models import JournalEntry
-from app.services.tmdb_client import movie_details
-import random
 
-# def recommendations(request):
-#     profile = get_or_create_profile(request)
-#     entries = list(JournalEntry.objects.filter(profile=profile).order_by("-created_at"))
 
-#     if not entries:
-#         return render(request, "recommendations.html", {"recs": [], "message": "Write a journal entry first."})
-
-#     # Take the most recent movie and ask TMDB for similar movies
-#     seed_tmdb_id = entries[0].tmdb_id
-
-#     # TMDB has /movie/{id}/similar — add this function in tmdb_client.py
-#     from app.services.tmdb_client import similar_movies
-#     candidates = similar_movies(seed_tmdb_id)
-
-#     # pick 3 random for now (works immediately)
-#     recs = random.sample(candidates, k=min(3, len(candidates)))
-
-#     return render(request, "recommendations.html", {"recs": recs, "message": ""})
 
 from django.shortcuts import render
 from app.services.profile_service import get_or_create_profile
@@ -111,8 +65,6 @@ def recommendations(request):
     max_runtime = int(max_runtime) if max_runtime and max_runtime.isdigit() else None
 
     picked, explanations = recommend(profile, k=3, max_runtime=max_runtime)
-
-    # Combine picked and explanations for easier template access
     picked_with_explanations = [
         {
             "movie": m,
@@ -125,7 +77,9 @@ def recommendations(request):
     return render(request, "recommendations.html", {
         "picked": picked_with_explanations,
         "max_runtime": max_runtime or "",
+                "active_page": "recs",
     })
+
 from django.shortcuts import redirect, get_object_or_404
 from app.models import JournalEntry
 from app.services.profile_service import get_or_create_profile

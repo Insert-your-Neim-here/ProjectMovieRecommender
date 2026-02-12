@@ -13,8 +13,8 @@
   <h2>Write a journal entry</h2>
   <form method="post">
     {% csrf_token %}
-    <textarea name="text" rows="6" style="width: 100%;" placeholder="What did you think?"></textarea>
-    <button type="submit">Save entry</button>
+    <textarea class="entry-body" name="text" rows="6" style="width: 100%;" placeholder="What did you think?"></textarea>
+    <button class="btn" type="submit">Save entry</button>
   </form>
 
   <p><a href="/">← Back to browse</a></p>

@@ -1,21 +1,52 @@
 {% extends "base.html" %}
 {% block content %}
-  <h1>Your Journal Entries</h1>
 
-  {% if entries %}
-    <ul>
-      {% for e in entries %}
-        <li style="margin: 12px 0;">
-          <b>{{ e.movie_title }}</b> — {{ e.created_at }}<br>
-          {{ e.text|truncatechars:200 }}
-          <form method="get" action="/journals/{{ e.id }}/delete/" style="display:inline;">
-  <button type="submit">Delete</button>
-</form>
+{% for e in entries %}
+  <div class="entry-row">
+    <div>
+      <div class="entry-title">{{ e.movie_title }}</div>
+      <!-- optional: show actual title instead -->
+      <!-- <div class="entry-title">{{ e.movie_title }}</div> -->
+    </div>
 
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No entries yet. Go browse a movie and write one.</p>
-  {% endif %}
+    <div class="entry-body">
+      Journal entry
+      <div style="margin-top:10px; opacity:0.8;">
+        {{ e.text|truncatechars:280 }}
+      </div>
+    </div>
+
+    <button class="btn" onclick="openDelete('{{ e.id }}')">Delete</button>
+  </div>
+{% empty %}
+  <p>No entries yet.</p>
+{% endfor %}
+
+<!-- Modal -->
+<div id="deleteBackdrop" class="modal-backdrop">
+  <div class="modal">
+    <h2>Are you sure that<br>you want to delete<br>this entry?</h2>
+
+    <div class="modal-actions">
+      <form id="deleteForm" method="post">
+        {% csrf_token %}
+        <button class="btn" type="submit">Yes</button>
+      </form>
+      <button class="btn" type="button" onclick="closeDelete()">No</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openDelete(entryId){
+    const backdrop = document.getElementById("deleteBackdrop");
+    const form = document.getElementById("deleteForm");
+    form.action = `/journals/${entryId}/delete/`;
+    backdrop.style.display = "grid";
+  }
+  function closeDelete(){
+    document.getElementById("deleteBackdrop").style.display = "none";
+  }
+</script>
+
 {% endblock %}
